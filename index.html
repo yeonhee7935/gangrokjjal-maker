@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>이미지 합성 서비스</title>
+    <script src="html2canvas.min.js"></script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+      }
+      #canvas-container {
+        position: relative;
+        display: inline-block;
+      }
+      #result {
+        display: none;
+      }
+      #text-input {
+        margin: 10px 0;
+        padding: 5px;
+      }
+      #text-overlay {
+        position: absolute;
+        bottom: 20px; /* 하단 여백 설정 */
+        left: 50%; /* 중앙 정렬을 위한 설정 */
+        transform: translateX(-50%); /* 수평 중앙 정렬을 위한 변환 */
+        color: white; /* 글자 색상 */
+        font-size: 20px; /* 글씨 크기 */
+        text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+          1px 1px 0 black; /* 스트로크 효과 */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>최강록 짤 생성기</h1>
+    <div id="canvas-container">
+      <img id="image" src="oil.jpg" alt="Background" style="width: 500px" />
+      <canvas id="canvas" style="display: none"></canvas>
+      <div id="text-overlay"></div>
+      <!-- 텍스트 오버레이 -->
+    </div>
+
+    <input
+      type="text"
+      id="text-input"
+      maxlength="10"
+      placeholder="최대 10글자 입력(ex: '나야 들기름')"
+    />
+    <button id="download">다운로드</button>
+    <canvas id="result"></canvas>
+
+    <script>
+      const image = document.getElementById("image");
+      const textInput = document.getElementById("text-input");
+      const textOverlay = document.getElementById("text-overlay");
+
+      // 텍스트 입력 시마다 오버레이 텍스트 업데이트
+      textInput.addEventListener("input", () => {
+        const text = textInput.value.trim();
+        textOverlay.textContent = text; // 텍스트 오버레이에 추가
+      });
+
+      // 다운로드 버튼 클릭 시
+      document.getElementById("download").addEventListener("click", () => {
+        html2canvas(document.getElementById("canvas-container")).then(
+          (canvas) => {
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/png"); // 이미지 데이터 URL 생성
+            link.download = "나야들기름.png"; // 다운로드 파일 이름
+            link.click(); // 링크 클릭으로 다운로드
+          },
+        );
+      });
+    </script>
+  </body>
+</html>
